@@ -1,4 +1,4 @@
-package com.newapp.composeapplicationstart.data.utils
+package com.example.quiltertask.data.utils
 
 sealed interface DataError : Error {
     enum class Network: DataError {

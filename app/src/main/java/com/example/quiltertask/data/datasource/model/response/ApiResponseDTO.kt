@@ -1,6 +1,5 @@
 package com.example.quiltertask.data.datasource.model.response
 
-
 import com.google.gson.annotations.SerializedName
 
 data class ApiResponseDTO(

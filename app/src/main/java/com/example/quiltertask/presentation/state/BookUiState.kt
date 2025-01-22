@@ -1,6 +1,5 @@
 package com.example.quiltertask.presentation.state
 
-import com.example.quiltertask.domain.model.Book
 import com.example.quiltertask.presentation.utils.UIText
 
 sealed class BookUiState<out T> {

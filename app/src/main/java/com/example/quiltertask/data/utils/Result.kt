@@ -1,4 +1,4 @@
-package com.newapp.composeapplicationstart.data.utils
+package com.example.quiltertask.data.utils
 
 typealias RootError = Error
 

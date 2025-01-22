@@ -6,8 +6,8 @@ import com.example.quiltertask.data.mapper.BookMapper
 import com.example.quiltertask.data.repository.BookRepositoryImpl
 import com.example.quiltertask.domain.model.Book
 import com.example.quiltertask.domain.repository.ErrorMapper
-import com.newapp.composeapplicationstart.data.utils.DataError
-import com.newapp.composeapplicationstart.data.utils.Result
+import com.example.quiltertask.data.utils.DataError
+import com.example.quiltertask.data.utils.Result
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -31,7 +31,6 @@ import org.junit.runners.JUnit4
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
-import kotlin.test.fail
 
 @RunWith(JUnit4::class)
 @ExperimentalCoroutinesApi
@@ -76,7 +75,6 @@ class BookRepositoryImpTest {
         )
         coEvery { apiService.getBooks() } returns Observable.just(mockApiResponse)
 
-        //Mock Mapper
         val mockBook = Book(
             title = "",
             author = "Mock Author",
@@ -84,9 +82,7 @@ class BookRepositoryImpTest {
         )
         every { bookMapper.mapApiResponseDTO(mockWork) } returns mockBook
 
-        //collect Result
         val result = repository.getBooks().first()
-        //Assert result is Success and data is mapped correctly
         assertTrue(result is Result.Success)
         val data = result.data
         assertNotNull(data)
@@ -97,11 +93,9 @@ class BookRepositoryImpTest {
 
     @Test
     fun `getBooks return error when Api call throws exception`() = runTest {
-        //Mock API throwing an exception
         val throwable = RuntimeException("Oops, something went wrong. Please try again.")
         coEvery { apiService.getBooks() } returns Observable.error(throwable)
 
-        //Mock Mapper for errors
         val mockError = DataError.Network.NO_INTERNET
         every { errorMapper.mapError(throwable) } returns mockError
 
@@ -110,7 +104,6 @@ class BookRepositoryImpTest {
         val error = (result as Result.Error).error
         assertEquals(mockError, error)
 
-        // Verify interactions
         coVerify { apiService.getBooks() }
         verify { errorMapper.mapError(throwable) }
     }
@@ -127,8 +120,8 @@ class BookRepositoryImpTest {
         val result = repository.getBooks().first()
 
         assertTrue(result is Result.Success)
-        val data = (result as Result.Success).data
-        assertTrue(data.isNullOrEmpty())
+        val data = result.data
+        assertTrue(data.isEmpty())
 
     }
 

@@ -5,8 +5,8 @@ import com.example.quiltertask.data.mapper.BookMapper
 import com.example.quiltertask.domain.model.Book
 import com.example.quiltertask.domain.repository.BookRepository
 import com.example.quiltertask.domain.repository.ErrorMapper
-import com.newapp.composeapplicationstart.data.utils.DataError
-import com.newapp.composeapplicationstart.data.utils.Result
+import com.example.quiltertask.data.utils.DataError
+import com.example.quiltertask.data.utils.Result
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.rx3.asFlow
 import javax.inject.Inject

@@ -3,24 +3,20 @@ package com.example.quiltertask.usecase
 import com.example.quiltertask.domain.model.Book
 import com.example.quiltertask.domain.repository.BookRepository
 import com.example.quiltertask.domain.usecase.GetBookUseCase
-import com.newapp.composeapplicationstart.data.utils.DataError
-import com.newapp.composeapplicationstart.data.utils.Result
+import com.example.quiltertask.data.utils.DataError
+import com.example.quiltertask.data.utils.Result
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
-import io.reactivex.rxjava3.plugins.RxJavaPlugins
-import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
-import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import kotlin.test.assertEquals
-import kotlin.test.assertFails
 import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue
 

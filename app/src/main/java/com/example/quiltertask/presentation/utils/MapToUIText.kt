@@ -1,9 +1,7 @@
 package com.example.quiltertask.presentation.utils
 
 import com.example.quiltertask.R
-import com.newapp.composeapplicationstart.data.utils.DataError
-import okio.IOException
-import retrofit2.HttpException
+import com.example.quiltertask.data.utils.DataError
 
 fun DataError.asUiText(): UIText {
     return when (this) {

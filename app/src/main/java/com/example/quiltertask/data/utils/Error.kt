@@ -1,3 +1,3 @@
-package com.newapp.composeapplicationstart.data.utils
+package com.example.quiltertask.data.utils
 
 sealed interface Error

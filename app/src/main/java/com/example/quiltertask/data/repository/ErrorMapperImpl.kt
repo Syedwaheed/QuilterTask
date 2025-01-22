@@ -1,7 +1,7 @@
 package com.example.quiltertask.data.repository
 
 import com.example.quiltertask.domain.repository.ErrorMapper
-import com.newapp.composeapplicationstart.data.utils.DataError
+import com.example.quiltertask.data.utils.DataError
 import okio.IOException
 import retrofit2.HttpException
 

@@ -6,7 +6,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -52,8 +51,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.example.quiltertask.domain.model.Book
 import com.example.quiltertask.presentation.state.BookUiState
-import com.example.quiltertask.presentation.viewmodel.BookViewModel
 import com.example.quiltertask.presentation.ui.theme.QuilterTaskTheme
+import com.example.quiltertask.presentation.viewmodel.BookViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -229,14 +228,14 @@ fun BookDetailSheet(book: Book) {
                 contentDescription = "Book Cover",
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(250.dp) // Adjust the height as needed
-                    .clip(RoundedCornerShape(8.dp)), // Optional for rounded corners
-                contentScale = ContentScale.Fit // Crop the image to fit nicely
+                    .height(250.dp)
+                    .clip(RoundedCornerShape(8.dp)),
+                contentScale = ContentScale.Fit
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Display Book Title and Author
+
             Text(
                 text = book.title,
                 style = MaterialTheme.typography.headlineSmall

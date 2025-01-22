@@ -7,7 +7,7 @@ import com.example.quiltertask.domain.repository.ErrorMapper
 import com.example.quiltertask.domain.usecase.GetBookUseCase
 import com.example.quiltertask.presentation.state.BookUiState
 import com.example.quiltertask.presentation.utils.asUiText
-import com.newapp.composeapplicationstart.data.utils.Result
+import com.example.quiltertask.data.utils.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
