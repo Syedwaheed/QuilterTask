@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">QuilterTask</string>
+    <string name="bad_request">Bad Request</string>
+    <string name="the_request_timed_out">The request timed out</string>
+    <string name="you_have_hit_your_rate_limit">You\'ve hit your rate limit</string>
+    <string name="no_internet">Check your internet connection.</string>
+    <string name="file_too_large">The file you tried to upload was too large.</string>
+    <string name="server_error">Oops, something went wrong. Please try again.</string>
+    <string name="unknown_error">An unknown error occurred</string>
+    <string name="error_disk_full">Failed to save the item because your device\'s disk is full</string>
+    <string name="error_serialization">Oops, couldn\'t parse data.</string>
+    <string name="error_password_too_short">The password is too short</string>
+    <string name="not_found">Not found</string>
+    <string name="too_many">Too many request</string>
+    <string name="pay_load_large">Pay load large</string>
+    <string name="un_auth">Un Authorize</string>
+</resources>
