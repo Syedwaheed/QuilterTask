@@ -101,7 +101,7 @@ class BookRepositoryImpTest {
 
         val result = repository.getBooks().first()
         assertTrue(result is Result.Error)
-        val error = (result as Result.Error).error
+        val error = result.error
         assertEquals(mockError, error)
 
         coVerify { apiService.getBooks() }
