@@ -1,6 +1,6 @@
 # BookListApp
 
-A simple Android app that demonstrates the use of **MVVM architecture**, **RxJava**, **Retrofit**, and **Hilt**. The app fetches book data from the Open Library API and displays it in a scrollable list with loading and error states. Users can select a book to view its details in a bottom sheet.
+A simple Android app that demonstrates the use of **MVVM architecture with Clean Code principles**,**JetPack Compose**, **RxJava**, **Retrofit**, **Hilt** and **Testing**. The app fetches book data from the Open Library API and displays it in a scrollable list with loading and error states. Users can select a book to view its details in a bottom sheet.
 
 ## Features
 - Fetch book data from Open Library API using Retrofit and RxJava.
