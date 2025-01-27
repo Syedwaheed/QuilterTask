@@ -2,9 +2,9 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.compose.compiler)
-    alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
-
+    alias(libs.plugins.screenshot)
+    id("kotlin-kapt")
 }
 
 android {
@@ -13,20 +13,27 @@ android {
 
     defaultConfig {
         applicationId = "com.example.quiltertask"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         minSdk = 24
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
     }
 
     buildTypes {
-        release {
+        debug {
             isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+        release {
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -45,8 +52,9 @@ android {
         buildConfig = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = "1.5.4"
     }
+    experimentalProperties["android.experimental.enableScreenshotTest"] = true
     packaging {
         resources.excludes.addAll(
             listOf(
@@ -61,6 +69,9 @@ android {
         unitTests{
             isIncludeAndroidResources = true
         }
+    }
+    kapt {
+        correctErrorTypes = true
     }
 
 }
@@ -79,9 +90,6 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
 
     //ViewModel
     implementation(libs.androidx.viewmodel)
@@ -90,7 +98,7 @@ dependencies {
 
     //Hilt
     implementation(libs.hilt.android.core)
-    ksp(libs.hilt.compiler)
+    kapt(libs.hilt.compiler)
 
     //Retrofit
     implementation(libs.retrofit)
@@ -108,8 +116,18 @@ dependencies {
     //Coil
     implementation(libs.androidx.coil)
     //Testing
-    testImplementation(libs.coroutine.test)
     testImplementation(libs.mockk)
     testImplementation(libs.kotlin.test.junit)
     androidTestImplementation(libs.androidx.mockk)
+    androidTestImplementation(libs.androidx.test.runner)
+    //ScreenShotTesting
+    debugImplementation(libs.androidx.ui.tooling)
+    screenshotTestImplementation(libs.androidx.ui.tooling)
+    //ComposeTesting
+    debugImplementation(libs.androidx.ui.test.manifest)
+    androidTestImplementation(libs.androidx.ui.test.junit4)
+
+    //ChuckerForLogging
+    debugImplementation(libs.androidx.chucker)
+    releaseImplementation(libs.androidx.no.chucker)
 }

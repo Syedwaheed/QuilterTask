@@ -4,25 +4,18 @@ import com.example.quiltertask.data.datasource.model.response.ApiResponseDTO
 import com.example.quiltertask.data.datasource.remote.BookApiService
 import com.example.quiltertask.data.mapper.BookMapper
 import com.example.quiltertask.data.repository.BookRepositoryImpl
-import com.example.quiltertask.domain.model.Book
-import com.example.quiltertask.domain.repository.ErrorMapper
 import com.example.quiltertask.data.utils.DataError
 import com.example.quiltertask.data.utils.Result
-import io.mockk.coEvery
-import io.mockk.coVerify
+import com.example.quiltertask.domain.model.Book
+import com.example.quiltertask.domain.repository.ErrorMapper
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.android.plugins.RxAndroidPlugins
+import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.plugins.RxJavaPlugins
 import io.reactivex.rxjava3.schedulers.Schedulers
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -41,23 +34,23 @@ class BookRepositoryImpTest {
     private val bookMapper: BookMapper = mockk()
     private val errorMapper: ErrorMapper = mockk()
 
-    private val testDispatcher = StandardTestDispatcher()
 
     @Before
     fun setUp() {
-        Dispatchers.setMain(testDispatcher)
         repository = BookRepositoryImpl(apiService, bookMapper,errorMapper)
         RxJavaPlugins.setIoSchedulerHandler { Schedulers.trampoline() }
+        RxAndroidPlugins.setInitMainThreadSchedulerHandler{Schedulers.trampoline()}
     }
 
     @After
     fun tearDown() {
-        Dispatchers.resetMain()
         RxJavaPlugins.reset()
+        RxAndroidPlugins.reset()
     }
 
     @Test
-    fun `getBooks return success when API call is successful`() = runTest {
+    fun `getBooks return success when API call is successful`() {
+        //Arrange
         val mockWork = ApiResponseDTO.ReadingLogEntry.Work(
             title = "Mock Title",
             authorNames = listOf("Mock Author"),
@@ -73,7 +66,7 @@ class BookRepositoryImpTest {
             page = null,
             readingLogEntries = listOf(mockReadingLogEntry)
         )
-        coEvery { apiService.getBooks() } returns Observable.just(mockApiResponse)
+        every { apiService.getBooks() } returns Single.just(mockApiResponse)
 
         val mockBook = Book(
             title = "",
@@ -82,7 +75,10 @@ class BookRepositoryImpTest {
         )
         every { bookMapper.mapApiResponseDTO(mockWork) } returns mockBook
 
-        val result = repository.getBooks().first()
+        //Act
+        val result = repository.getBooks().blockingGet()
+
+        //Assert
         assertTrue(result is Result.Success)
         val data = result.data
         assertNotNull(data)
@@ -92,33 +88,40 @@ class BookRepositoryImpTest {
 
 
     @Test
-    fun `getBooks return error when Api call throws exception`() = runTest {
+    fun `getBooks return error when Api call throws exception`(){
+        //Arrange
         val throwable = RuntimeException("Oops, something went wrong. Please try again.")
-        coEvery { apiService.getBooks() } returns Observable.error(throwable)
+        every { apiService.getBooks() } returns Single.error(throwable)
 
         val mockError = DataError.Network.NO_INTERNET
         every { errorMapper.mapError(throwable) } returns mockError
 
-        val result = repository.getBooks().first()
+        //Act
+        val result = repository.getBooks().blockingGet()
+
+        //Assert
         assertTrue(result is Result.Error)
         val error = result.error
         assertEquals(mockError, error)
 
-        coVerify { apiService.getBooks() }
+        verify { apiService.getBooks() }
         verify { errorMapper.mapError(throwable) }
     }
 
     @Test
-    fun`getBooks return empty list when Api response has no readingLogEntries`() = runTest{
+    fun`getBooks return empty list when Api response has no readingLogEntries`() {
+        //Arrange
         val apiResponse = ApiResponseDTO(
             numFound = null,
             page = null,
             readingLogEntries = null
         )
-        coEvery { apiService.getBooks() } returns Observable.just(apiResponse)
+        every { apiService.getBooks() } returns Single.just(apiResponse)
 
-        val result = repository.getBooks().first()
+        //Act
+        val result = repository.getBooks().blockingGet()
 
+        //Assert
         assertTrue(result is Result.Success)
         val data = result.data
         assertTrue(data.isEmpty())

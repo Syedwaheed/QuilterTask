@@ -19,3 +19,20 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+#keep data classes used with Gson
+-keep class com.example.quiltertask.data.datasource.model.response.**{*;}
+-keepclassmembers class com.example.quiltertask.data.datasource.model.response.**{
+@com.google.gson.annotations.SerializedName <fields>;
+}
+-keepattributes *Annotation*
+-keep class com.chuckerteam.chucker.** { *; }
+# Keep RxJava classes
+-keep class io.reactivex.rxjava3.** { *; }
+
+# Retrofit and OkHttp
+-keepattributes Signature
+-keepattributes Exceptions
+-keep class retrofit2.** { *; }
+-keep class okhttp3.** { *; }
+-keep class okio.** { *; }

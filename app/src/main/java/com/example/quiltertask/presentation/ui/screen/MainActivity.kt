@@ -41,7 +41,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
@@ -79,7 +81,7 @@ class MainActivity : ComponentActivity() {
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
+ internal fun QuilterTaskPreview() {
     QuilterTaskTheme {
         val mockTrendingMovies = listOf(
             Book("Hello one dgasfjoisjdfijasojdfjasojfoasjodfjoasjdfoijasoj", "Movie 1", "dfa"),
@@ -193,6 +195,7 @@ fun BookItem(book: Book?, onClick: () -> Unit) {
             model = book?.coverID,
             contentDescription = "Book Cover",
             modifier = Modifier.size(120.dp),
+            contentScale = ContentScale.Crop
         )
         Spacer(modifier = Modifier.width(16.dp))
         Column(

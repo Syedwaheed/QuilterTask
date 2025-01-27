@@ -1,6 +1,10 @@
 package com.example.quiltertask.di
 
+import android.content.Context
 import android.util.Log
+import com.chuckerteam.chucker.api.ChuckerCollector
+import com.chuckerteam.chucker.api.ChuckerInterceptor
+import com.chuckerteam.chucker.api.RetentionManager
 import com.example.quiltertask.BuildConfig
 import com.example.quiltertask.data.datasource.remote.BookApiService
 import com.example.quiltertask.data.mapper.BookMapper
@@ -11,6 +15,7 @@ import com.example.quiltertask.domain.repository.ErrorMapper
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -43,7 +48,7 @@ class ApiModule {
 
     @Singleton
     @Provides
-    fun provideOkHttpClient(): OkHttpClient {
+    fun provideOkHttpClient(chuckerInterceptor: ChuckerInterceptor?): OkHttpClient {
         val loggingInterceptor = HttpLoggingInterceptor { message ->
             Log.d("API_LOG", message)
         }
@@ -52,12 +57,38 @@ class ApiModule {
         } else {
             HttpLoggingInterceptor.Level.NONE
         }
-        return OkHttpClient.Builder()
-            .addInterceptor(loggingInterceptor)
-            .connectTimeout(30,TimeUnit.SECONDS)
-            .readTimeout(30,TimeUnit.SECONDS)
-            .writeTimeout(30,TimeUnit.SECONDS)
-            .build()
+        return OkHttpClient.Builder().apply {
+            addInterceptor(loggingInterceptor)
+            chuckerInterceptor?.let {
+                addInterceptor(it)
+            }
+            connectTimeout(30, TimeUnit.SECONDS)
+            readTimeout(30, TimeUnit.SECONDS)
+            writeTimeout(30, TimeUnit.SECONDS)
+        }.build()
+    }
+
+    @Singleton
+    @Provides
+    fun provideChucker(@ApplicationContext context: Context): ChuckerInterceptor? {
+        return if (BuildConfig.DEBUG) {
+            val chuckerCollector = ChuckerCollector(
+                context = context,
+                showNotification = true,
+                retentionPeriod = RetentionManager.Period.ONE_HOUR
+            )
+
+            val chuckerInterceptor = ChuckerInterceptor.Builder(context)
+                .collector(chuckerCollector)
+                .maxContentLength(250_000L)
+                .redactHeaders("Auth-Token", "Bearer")
+                .alwaysReadResponseBody(true)
+                .createShortcut(true)
+                .build()
+            return chuckerInterceptor
+        } else {
+            null
+        }
     }
 
     @Singleton

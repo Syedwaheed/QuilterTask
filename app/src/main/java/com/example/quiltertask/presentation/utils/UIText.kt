@@ -5,7 +5,7 @@ import androidx.compose.ui.res.stringResource
 
 sealed class UIText {
     data class DynamicText(val value: String) : UIText()
-    class StringResource(
+    data class StringResource(
         val resId: Int
     ) : UIText() {
 
